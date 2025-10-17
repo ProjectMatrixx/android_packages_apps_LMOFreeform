@@ -37,14 +37,16 @@ class StartFreeformReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == ACTION) {
-            val isNativeFreeformEnabled = Settings.System.getInt(
+            val freeformModeSetting = Settings.System.getInt(
                 context.contentResolver,
                 "freeform_launch_mode",
-                0
-            ) != 0
+                1 
+            )
+
             val isSideBarBroadcast = 
                 intent.getStringExtra("packageName").equals(PACKAGE_NAME)
-            if (isNativeFreeformEnabled && !isSideBarBroadcast) {
+
+            if (freeformModeSetting == 0 && !isSideBarBroadcast) {
                 launchAppInNativeFreeform(context, intent)
             } else {
                 launchAppInLMOFreeform(context, intent)
